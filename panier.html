@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+    
+class Produit {
+
+    constructor(id, nom, prix) {
+      this.id = id;
+      this.nom = nom;
+      this.prix = prix;
+    }
+}
+  
+  
+class ElementPanier {
+
+    constructor(produit, quantite) {
+      this.produit = produit;
+      this.quantite = quantite;
+    }
+  
+    total() {
+      return this.produit.prix * this.quantite;
+    }
+  
+    afficher() {
+      return `${this.produit.nom} x${this.quantite} = ${this.total().toFixed(2)}€`;
+    }
+  
+    mettreAJourQuantite(nouvelleQuantite) {
+      this.quantite = nouvelleQuantite;
+    }
+}
+  
+ 
+class Panier {
+
+    constructor() {
+      this.elements = [];  
+    }
+  
+    ajouterElement(element) {
+      const index = this.elements.findIndex(e => e.produit.id === element.produit.id);
+      if (index !== -1) {
+        this.elements[index].mettreAJourQuantite(this.elements[index].quantite + element.quantite);
+      }
+       else {
+        this.elements.push(element);
+      }
+    }
+  
+    supprimerElement(produitId) {
+      this.elements = this.elements.filter(element => element.produit.id !== produitId);
+    }
+  
+    totalPanier() {
+      return this.elements.reduce((total, element) => total + element.total(), 0);
+    }
+  
+    afficherPanier() {
+      if (this.elements.length === 0) {
+        return "Le panier est vide.";
+      }
+      return this.elements.map(element => element.afficher()).join('\n');
+    }
+}
+  
+  // Test de la capacité des objets
+  
+const produit1 = new Produit(1, "Ordinateur Portable", 999.99);
+const produit2 = new Produit(2, "Smartphone", 499.99);
+
+const panier = new Panier();
+  
+const element1 = new ElementPanier(produit1, 2);  
+const element2 = new ElementPanier(produit2, 3);  
+  
+panier.ajouterElement(element1);
+panier.ajouterElement(element2);
+  
+console.log("Affichage du panier après ajout des éléments :");
+console.log(panier.afficherPanier());
+  
+panier.supprimerElement(1);  
+  
+console.log("\nAffichage du panier après suppression d'un élément :");
+console.log(panier.afficherPanier());
+  
+    </script>
+</body>
+</html>
